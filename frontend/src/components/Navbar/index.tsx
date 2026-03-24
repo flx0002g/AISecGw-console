@@ -17,31 +17,31 @@ const Navbar: React.FC<NavbarProps> = () => {
     return [
       {
         name: t("navbar.officialWebsite"),
-        link: `https://wntaigw.io/${officialSiteLang}/`,
+        link: `https://wntasg.io/${officialSiteLang}/`,
       },
       {
         name: t("navbar.docs"),
-        link: `https://wntaigw.io/${officialSiteLang}/docs/overview/what-is-wntaigw/`,
+        link: `https://wntasg.io/${officialSiteLang}/docs/overview/what-is-wntasg/`,
       },
       {
         name: t("navbar.commercial"),
-        link: `https://www.aliyun.com/product/apigateway?spm=wntaigw-console.topbar.0.0.0`,
+        link: `https://www.aliyun.com/product/apigateway?spm=wntasg-console.topbar.0.0.0`,
       },
       {
         name: t("navbar.developers"),
-        link: `https://wntaigw.io/${officialSiteLang}/docs/developers/developers_dev/`,
+        link: `https://wntasg.io/${officialSiteLang}/docs/developers/developers_dev/`,
       },
       {
         name: t("navbar.blog"),
-        link: `https://wntaigw.io/${officialSiteLang}/blog/`,
+        link: `https://wntasg.io/${officialSiteLang}/blog/`,
       },
       {
         name: t("navbar.community"),
-        link: `https://wntaigw.io/${officialSiteLang}/community/`,
+        link: `https://wntasg.io/${officialSiteLang}/community/`,
       },
       {
         name: t("navbar.download"),
-        link: "https://github.com/alibaba/wntaigw/releases",
+        link: "https://github.com/flx0002g/AISecGw/releases",
       },
     ];
   }, [i18n.language]);
@@ -57,7 +57,7 @@ const Navbar: React.FC<NavbarProps> = () => {
         );
       })}
       <li>
-        <a href="https://github.com/alibaba/wntaigw" target="_blank">
+        <a href="https://github.com/flx0002g/AISecGw" target="_blank">
           <GithubOutlined style={{ fontSize: "16px" }} />
         </a>
       </li>

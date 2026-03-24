@@ -22,7 +22,7 @@ const ChatRobot = () => {
   const initMessage = {
     text: `您好~ 如果您喜欢 <b>WntASG</b>，请给 WntASG 一颗星！ <br /> 您的支持是我们最大的动力～`,
     img: StarIcon,
-    link: 'https://github.com/alibaba/wntaigw',
+    link: 'https://github.com/flx0002g/AISecGw',
     date: new Date(),
     reply: true,
     type: 'init',
