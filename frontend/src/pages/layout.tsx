@@ -1,4 +1,4 @@
-import logo from '@/assets/logo.png';
+import logo from '@/assets/logo.svg';
 import AvatarDropdown from '@/components/AvatarDropdown';
 import ChatRobot from '@/components/ChatRobot';
 import Footer from '@/components/Footer';

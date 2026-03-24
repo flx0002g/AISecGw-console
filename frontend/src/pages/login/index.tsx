@@ -1,4 +1,4 @@
-import logo from '@/assets/logo.png';
+import logo from '@/assets/logo.svg';
 import LanguageDropdown from '@/components/LanguageDropdown';
 import { LOGIN_PROMPT, SYSTEM_INITIALIZED } from '@/interfaces/config';
 import type { LoginParams, UserInfo } from '@/interfaces/user';

@@ -2,7 +2,7 @@
   "navbar": {
     "officialWebsite": "OFFICIAL WEBSITE",
     "docs": "DOCS",
-    "commercial": "HIGRESS IN CLOUD",
+    "commercial": "WNTAIGW IN CLOUD",
     "developers": "DEVELOPERS",
     "blog": "BLOG",
     "community": "COMMUNITY",
@@ -26,7 +26,7 @@
     "mcpConfigurations": "MCP Configurations"
   },
   "index": {
-    "title": "Higress Console"
+    "title": "WntASG Console"
   },
   "init": {
     "title": "System Setup",

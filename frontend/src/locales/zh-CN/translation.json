@@ -2,7 +2,7 @@
   "navbar": {
     "officialWebsite": "官网",
     "docs": "文档",
-    "commercial": "Higress 企业版",
+    "commercial": "WntASG 企业版",
     "developers": "开发者",
     "blog": "博客",
     "community": "社区",
@@ -26,7 +26,7 @@
     "mcpConfigurations": "MCP配置"
   },
   "index": {
-    "title": "Higress Console"
+    "title": "WntASG Console"
   },
   "init": {
     "title": "系统初始化",
