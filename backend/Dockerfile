@@ -1,18 +1,19 @@
-FROM eclipse-temurin:21-jdk
+FROM docker.m.daocloud.io/library/eclipse-temurin:21-jdk
 
-RUN apt-get update && apt-get install -y \
-    curl \
- && rm -rf /var/lib/apt/lists/*
+LABEL maintainer="WntASG Team"
+LABEL description="WntASG Console - Security Gateway Management"
+LABEL version="0.0.1-SNAPSHOT"
+LABEL product="WntASG"
 
 WORKDIR /app
-COPY console/target/higress-console.jar /app
-COPY start.sh /app
 
-ARG TARGETARCH
-COPY tools/mcp/${TARGETARCH}/main /app/tools/mcp/
-COPY tools/mcp/openapiToMcpserver.sh /app/tools/mcp/
-RUN chmod +x /app/tools/mcp/openapiToMcpserver.sh \
-    && chmod +x /app/tools/mcp/main
+COPY console/target/higress-console.jar /app/higress-console.jar
+COPY start.sh /app/start.sh
+RUN chmod +x /app/start.sh
+
+ENV JAVA_OPTS="-Xms512m -Xmx2g"
+ENV SERVER_PORT=8080
 
 EXPOSE 8080
-CMD ["/app/start.sh"]
+
+ENTRYPOINT ["/app/start.sh"]
