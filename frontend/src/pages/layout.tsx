@@ -1,4 +1,3 @@
-import logo from '@/assets/logo.svg';
 import AvatarDropdown from '@/components/AvatarDropdown';
 import ChatRobot from '@/components/ChatRobot';
 import Footer from '@/components/Footer';
@@ -39,9 +38,29 @@ export default function Layout() {
       <ProLayout
         {...defaultProps}
         className={styles.layout}
-        logo={<img src={logo} alt="logo" />}
+        logo={<img src="/titleLogo.png" alt="新一代AI融合安全网关" />}
         pure={route && !!route.usePureLayout}
-        title="WntASG Console"
+        title="新一代AI融合安全网关"
+        navTheme="light"
+        headerTheme="dark"
+        token={{
+          header: {
+            colorBgHeader: '#23244c',
+            colorHeaderTitle: '#cdd0e2',
+            colorTextMenu: '#cdd0e2',
+            colorTextMenuSecondary: '#cdd0e2',
+            colorTextMenuSelected: '#00fbf9',
+            colorBgMenuItemSelected: 'rgba(0, 251, 249, 0.1)',
+            colorTextMenuActive: '#00fbf9',
+          },
+          sider: {
+            colorBgSider: '#F6F6F6',
+            colorTextMenu: '#333333',
+            colorTextMenuSelected: '#333333',
+            colorBgMenuItemSelected: '#ffffff',
+            colorTextMenuActive: '#333333',
+          },
+        }}
         location={{
           pathname: location.pathname,
         }}

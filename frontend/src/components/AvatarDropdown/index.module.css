@@ -5,19 +5,22 @@
   padding: 0 12px;
   cursor: pointer;
   transition: all 0.3s;
-
+  color: #cdd0e2;
 
   &:hover {
-    background: rgba(0, 0, 0, 0.025);
+    background: rgba(255, 255, 255, 0.1);
+    color: #00fbf9;
   }
 
   &:global(.opened) {
-    background: rgba(0, 0, 0, 0.025);
+    background: rgba(255, 255, 255, 0.1);
+    color: #00fbf9;
   }
 }
 
 .action > span {
   vertical-align: middle;
+  color: #cdd0e2;
 }
 
 .account > .avatar {

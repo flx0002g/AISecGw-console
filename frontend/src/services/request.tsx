@@ -47,16 +47,12 @@ request.interceptors.response.use(
 
       if (status === 401) {
         if (config.url.indexOf('/login') !== -1) {
-          // Unauthorized response is allowed for a login request.
-          Promise.resolve(error.response);
-          return;
+          return Promise.resolve(error.response);
         }
-        // Unauthorized. Jump to the login page.
-        Promise.reject(error);
         if (window.location.href.indexOf('/init') === -1 && window.location.href.indexOf('/login') === -1) {
           window.location.href = `/login?redirect=${window.location.pathname}`;
         }
-        return;
+        return Promise.reject(error);
       }
       const messageKeys = [`request.error.${status}_${config.method}`, `request.error.${status}`];
       for (const key of messageKeys) {

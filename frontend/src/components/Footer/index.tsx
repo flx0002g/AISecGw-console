@@ -6,7 +6,10 @@ const Footer: React.FC = () => {
 
   return (
     <div style={{ textAlign: 'center', margin: 10 }}>
-      &copy; {currentYear} WntASG
+      &copy; {currentYear}{' '}
+      <a href="https://wntasg.io/" target="_blank" rel="noopener noreferrer">WntASG</a>
+      {' | '}
+      <a href="https://github.com/flx0002g/AISecGw" target="_blank" rel="noopener noreferrer">GitHub</a>
       {
         systemState.version && (
           <>
