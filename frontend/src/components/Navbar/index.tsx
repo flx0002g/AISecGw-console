@@ -1,43 +1,40 @@
-import i18n, { lngs } from "@/i18n";
+import i18n from "@/i18n";
+import { getOfficialSiteLink } from "@/utils";
 import { GithubOutlined } from "@ant-design/icons";
 import React, { useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import styles from "./index.module.css";
 
+const COMMERCIAL_URL_ZH = "https://www.aliyun.com/product/apigateway?spm=wntasg-console.topbar.0.0.0";
+const COMMERCIAL_URL_EN = "https://www.alibabacloud.com/en/product/api-gateway?spm=wntasg-console.topbar.0.0.0";
+
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
-interface NavbarProps {}
+interface NavbarProps { }
 
 const Navbar: React.FC<NavbarProps> = () => {
   const { t } = useTranslation();
 
   const linkList = useMemo(() => {
-    const lang = i18n.language;
-    const langConfig = lngs.find(l => l.code === lang);
-    const officialSiteLang = langConfig?.officialSiteCode || lang.toLowerCase();
     return [
       {
         name: t("navbar.officialWebsite"),
-        link: `https://wntasg.io/${officialSiteLang}/`,
+        link: getOfficialSiteLink("/"),
       },
       {
         name: t("navbar.docs"),
-        link: `https://wntasg.io/${officialSiteLang}/docs/overview/what-is-wntasg/`,
+        link: getOfficialSiteLink("/docs/latest/overview/what-is-wntasg"),
       },
       {
         name: t("navbar.commercial"),
-        link: `https://www.aliyun.com/product/apigateway?spm=wntasg-console.topbar.0.0.0`,
+        link: i18n.language.startsWith("zh") ? COMMERCIAL_URL_ZH : COMMERCIAL_URL_EN,
       },
       {
         name: t("navbar.developers"),
-        link: `https://wntasg.io/${officialSiteLang}/docs/developers/developers_dev/`,
+        link: getOfficialSiteLink("/docs/developers/developers_dev/"),
       },
       {
         name: t("navbar.blog"),
-        link: `https://wntasg.io/${officialSiteLang}/blog/`,
-      },
-      {
-        name: t("navbar.community"),
-        link: `https://wntasg.io/${officialSiteLang}/community/`,
+        link: getOfficialSiteLink("/blog/"),
       },
       {
         name: t("navbar.download"),
@@ -45,6 +42,7 @@ const Navbar: React.FC<NavbarProps> = () => {
       },
     ];
   }, [i18n.language]);
+
   return (
     <ul className={styles["header-nav-bar"]}>
       {linkList.map((item) => {
