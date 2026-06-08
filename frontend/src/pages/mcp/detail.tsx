@@ -28,7 +28,7 @@ const MCPDetailPage: React.FC = () => {
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState('config');
   const [mcpData, setMcpData] = useState<any>(null);
-  const [apiGatewayUrl, setApiGatewayUrl] = useState('http://<higress-gateway-ip>');
+  const [apiGatewayUrl, setApiGatewayUrl] = useState('http://<wntasg-gateway-ip>');
   const [authEnabled, setAuthEnabled] = useState(false);
   const [authType, setAuthType] = useState<string | null>(null);
   const [tools, setTools] = useState<any[]>([]);
@@ -67,7 +67,7 @@ const MCPDetailPage: React.FC = () => {
           const domainProtocol = domain?.enableHttps === 'off' ? 'http' : 'https';
           setApiGatewayUrl(`${domainProtocol}://${domain?.name}`);
         } else {
-          setApiGatewayUrl('http://<higress-gateway-ip>');
+          setApiGatewayUrl('http://<wntasg-gateway-ip>');
         }
       }
     } catch (error) {
@@ -264,10 +264,10 @@ const MCPDetailPage: React.FC = () => {
                 <Card title={t('mcp.detail.endpointInfo')} bordered style={{ marginTop: 16 }}>
                   <Descriptions column={2}>
                     <Descriptions.Item label={t('mcp.detail.sseEndpoint')}>
-                      {`${apiGatewayUrl || 'http://<higress-gateway-ip>'}/mcp-servers/${name}/sse`}
+                      {`${apiGatewayUrl || 'http://<wntasg-gateway-ip>'}/mcp-servers/${name}/sse`}
                     </Descriptions.Item>
                     <Descriptions.Item label={t('mcp.detail.httpEndpoint')}>
-                      {`${apiGatewayUrl || 'http://<higress-gateway-ip>'}/mcp-servers/${name}`}
+                      {`${apiGatewayUrl || 'http://<wntasg-gateway-ip>'}/mcp-servers/${name}`}
                     </Descriptions.Item>
                   </Descriptions>
                 </Card>
@@ -412,7 +412,7 @@ const MCPDetailPage: React.FC = () => {
                     />
                   </div>
 
-                  {apiGatewayUrl !== 'http://<higress-gateway-ip>' && (
+                  {apiGatewayUrl !== 'http://<wntasg-gateway-ip>' && (
                     <div>
                       <div style={{ fontWeight: 'bold', marginBottom: 8 }}>{t('mcp.detail.step2')}</div>
                       <div style={{ background: '#f7f9fa', padding: 16, borderRadius: 4 }}>

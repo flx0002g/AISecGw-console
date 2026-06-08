@@ -17,8 +17,8 @@
 		<nodejs.version>22.22.2</nodejs.version>
 		<springdoc-openapi-maven-plugin.version>1.4</springdoc-openapi-maven-plugin.version>
 
-		<app.build.version>2.1.0</app.build.version>
-		<app.build.dev>true</app.build.dev>
+		<app.build.version>2.2.2</app.build.version>
+		<app.build.dev>false</app.build.dev>
 	</properties>
 
 	<dependencies>
@@ -122,15 +122,6 @@
 						</configuration>
 					</execution>
 					<execution>
-						<id>update caniuse db</id>
-						<goals>
-							<goal>npx</goal>
-						</goals>
-						<configuration>
-							<arguments>browserslist@latest --update-db</arguments>
-						</configuration>
-					</execution>
-					<execution>
 						<id>npm build</id>
 						<goals>
 							<goal>npm</goal>
@@ -193,9 +184,9 @@
 				</executions>
 				<configuration>
 					<verbose>false</verbose>
+					<failOnNoGitDirectory>false</failOnNoGitDirectory>
 					<generateGitPropertiesFile>true</generateGitPropertiesFile>
 					<generateGitPropertiesFilename>src/main/resources/git.properties</generateGitPropertiesFilename>
-					<failOnNoGitDirectory>true</failOnNoGitDirectory>
 					<includeOnlyProperties>
 						<includeOnlyProperty>^git.commit.id$</includeOnlyProperty>
 					</includeOnlyProperties>

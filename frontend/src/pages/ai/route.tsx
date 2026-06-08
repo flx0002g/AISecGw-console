@@ -210,7 +210,7 @@ const AiRouteList: React.FC = () => {
   }, []);
 
   const buildUsageCommand = (aiRoute: AiRoute): string => {
-    let command = `curl -sv http://<higress-gateway-ip>/v1/chat/completions \\
+    let command = `curl -sv http://<wntasg-gateway-ip>/v1/chat/completions \\
     -X POST \\
     -H 'Content-Type: application/json'`;
     if (aiRoute.domains && aiRoute.domains.length) {

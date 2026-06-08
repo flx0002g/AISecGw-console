@@ -1,7 +1,7 @@
 {
   "name": "@ice/antd-pro-scaffold",
   "version": "0.1.0",
-  "description": "higress console",
+  "description": "WntASG Console",
   "dependencies": {
     "@ant-design/charts": "^1.4.2",
     "@ant-design/icons": "^4.7.0",
