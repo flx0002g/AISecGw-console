@@ -343,7 +343,7 @@ class WasmPluginServiceImpl implements WasmPluginService {
             List<V1alpha1WasmPlugin> crs = kubernetesClientService.listWasmPlugin();
             for (V1alpha1WasmPlugin cr : crs) {
                 WasmPlugin plugin = kubernetesModelConverter.wasmPluginFromCr(cr);
-                if (plugin.getBuiltIn()) {
+                if (Boolean.TRUE.equals(plugin.getBuiltIn())) {
                     WasmPlugin builtInPlugin =
                         plugins.stream().filter(p -> p.getName().equals(plugin.getName())).findFirst().orElse(null);
                     if (builtInPlugin != null) {

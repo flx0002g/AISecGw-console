@@ -75,7 +75,7 @@ export default function Layout() {
         pageTitleRender={(props, defaultPageTitle) => {
           return (route && route.name ? t(route.name) : defaultPageTitle) || '';
         }}
-        menu={{ defaultOpenAll: true }}
+        menu={{ defaultOpenAll: false }}
         menuDataRender={(items) => {
           function filterMenuItem(item) {
             if (item.hideFromMenu) {

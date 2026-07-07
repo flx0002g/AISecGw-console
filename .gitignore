@@ -1,6 +1,7 @@
 node_modules
 .ice
 frontend/build
+frontend/i18n-check-results/
 .DS_Store
 
 HELP.md

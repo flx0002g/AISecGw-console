@@ -1,0 +1,185 @@
+apiVersion: 1.0.0
+info:
+  gatewayMinVersion: ""
+  type: enterprise
+  category: ai
+  name: shadow-ai-detect
+  image: platform_wasm/shadow-ai-detect
+  title: Shadow AI Detect
+  x-title-i18n:
+    zh-CN: 影子AI检测
+  description: Detect and block unauthorized access to AI services by matching SNI and Host against known AI service domains.
+  x-description-i18n:
+    zh-CN: 通过匹配 SNI 和 Host 头识别未经授权的 AI 服务访问，支持监控和阻断模式。
+  iconUrl: https://img.alicdn.com/imgextra/i3/O1CN01bAFa9k1t1gdQcVTH0_!!6000000005842-2-tps-42-42.png
+  version: 1.0.0
+  contact:
+    name: Winicssec
+spec:
+  phase: AUTHZ
+  priority: 310
+  configSchema:
+    openAPIV3Schema:
+      type: object
+      properties:
+        mode:
+          type: string
+          title: 检测模式
+          x-title-i18n:
+            en-US: Detection Mode
+          description: "监控模式仅记录流量，管控模式会阻断未授权的AI服务访问。默认为 monitoring"
+          x-description-i18n:
+            en-US: "Monitoring mode only records traffic, enforcement mode blocks unauthorized AI service access. Default is monitoring"
+          enum: [monitoring, enforcement]
+          default: monitoring
+        blocked_code:
+          type: number
+          title: 阻断时返回的HTTP状态码
+          x-title-i18n:
+            en-US: HTTP Status Code When Blocked
+          description: 请求被阻断时返回的HTTP状态码，默认为403
+          x-description-i18n:
+            en-US: HTTP status code returned when the request is blocked. Default is 403
+          example:
+            - 403
+        blocked_message:
+          type: string
+          title: 阻断时返回的响应消息
+          x-title-i18n:
+            en-US: Blocked Response Message
+          description: 请求被阻断时返回的响应消息
+          x-description-i18n:
+            en-US: Response message returned when the request is blocked
+          example:
+            - "Access to unauthorized AI service is blocked"
+        categories:
+          type: array
+          title: AI服务分类规则
+          x-title-i18n:
+            en-US: AI Service Category Rules
+          description: 要检测的AI服务分类及其域名匹配规则
+          x-description-i18n:
+            en-US: AI service categories and their domain matching rules to detect
+          items:
+            type: object
+            required: [name, risk_level]
+            properties:
+              name:
+                type: string
+                title: 分类标识
+                x-title-i18n:
+                  en-US: Category Name
+                description: 分类的唯一标识，如 saas_ai
+                x-description-i18n:
+                  en-US: Unique identifier of the category, e.g. saas_ai
+              label:
+                type: string
+                title: 分类显示名称
+                x-title-i18n:
+                  en-US: Category Label
+                description: 分类的显示名称，如 "云端SaaS AI"
+                x-description-i18n:
+                  en-US: Display name of the category, e.g. "Cloud SaaS AI"
+              risk_level:
+                type: string
+                title: 风险等级
+                x-title-i18n:
+                  en-US: Risk Level
+                description: 该分类的风险等级
+                x-description-i18n:
+                  en-US: Risk level of this category
+                enum: [critical, high, medium, low]
+              domains:
+                type: array
+                title: 精确域名匹配列表
+                x-title-i18n:
+                  en-US: Exact Domain Match List
+                description: 需要精确匹配的域名列表
+                x-description-i18n:
+                  en-US: List of domains to match exactly
+                items:
+                  type: string
+              suffixes:
+                type: array
+                title: 域名后缀匹配列表
+                x-title-i18n:
+                  en-US: Domain Suffix Match List
+                description: 需要后缀匹配的域名列表，如 ".openai.com"
+                x-description-i18n:
+                  en-US: List of domain suffixes to match, e.g. ".openai.com"
+                items:
+                  type: string
+      example:
+        mode: monitoring
+        blocked_code: 403
+        blocked_message: "Access to unauthorized AI service is blocked"
+        categories:
+          - name: saas_ai
+            label: "云端SaaS AI"
+            risk_level: high
+            domains:
+              - "api.openai.com"
+              - "chat.openai.com"
+              - "deepseek.com"
+            suffixes:
+              - ".openai.com"
+              - ".deepseek.com"
+  routeConfigSchema:
+    openAPIV3Schema:
+      type: object
+      properties:
+        mode:
+          type: string
+          title: 检测模式
+          x-title-i18n:
+            en-US: Detection Mode
+          description: "监控模式仅记录流量，管控模式会阻断未授权的AI服务访问"
+          x-description-i18n:
+            en-US: "Monitoring mode only records traffic, enforcement mode blocks unauthorized AI service access"
+          enum: [monitoring, enforcement]
+        blocked_code:
+          type: number
+          title: 阻断时返回的HTTP状态码
+          x-title-i18n:
+            en-US: HTTP Status Code When Blocked
+          description: 请求被阻断时返回的HTTP状态码，默认为403
+          x-description-i18n:
+            en-US: HTTP status code returned when the request is blocked. Default is 403
+        blocked_message:
+          type: string
+          title: 阻断时返回的响应消息
+          x-title-i18n:
+            en-US: Blocked Response Message
+          description: 请求被阻断时返回的响应消息
+          x-description-i18n:
+            en-US: Response message returned when the request is blocked
+        categories:
+          type: array
+          title: AI服务分类规则
+          x-title-i18n:
+            en-US: AI Service Category Rules
+          description: 要检测的AI服务分类及其域名匹配规则
+          x-description-i18n:
+            en-US: AI service categories and their domain matching rules to detect
+          items:
+            type: object
+            required: [name, risk_level]
+            properties:
+              name:
+                type: string
+                title: 分类标识
+              label:
+                type: string
+                title: 分类显示名称
+              risk_level:
+                type: string
+                title: 风险等级
+                enum: [critical, high, medium, low]
+              domains:
+                type: array
+                items:
+                  type: string
+              suffixes:
+                type: array
+                items:
+                  type: string

@@ -15,6 +15,7 @@
 
 	<properties>
 		<nodejs.version>22.22.2</nodejs.version>
+		<skip.frontend>false</skip.frontend>
 		<springdoc-openapi-maven-plugin.version>1.4</springdoc-openapi-maven-plugin.version>
 
 		<app.build.version>2.2.2</app.build.version>
@@ -101,6 +102,7 @@
 				<artifactId>frontend-maven-plugin</artifactId>
 				<configuration>
 					<workingDirectory>../../frontend/</workingDirectory>
+					<skip>${skip.frontend}</skip>
 				</configuration>
 				<executions>
 					<execution>

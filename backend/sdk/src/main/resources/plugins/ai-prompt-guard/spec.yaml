@@ -1,0 +1,155 @@
+apiVersion: 1.0.0
+info:
+  gatewayMinVersion: "2.0.0"
+  type: enterprise
+  category: ai
+  image: platform_wasm/ai-prompt-guard
+  name: ai-prompt-guard
+  title: AI Prompt Guard
+  x-title-i18n:
+    zh-CN: AI 提示词防护
+  description: Block malicious prompts in LLM requests using configurable deny and allow regex patterns.
+  x-description-i18n:
+    zh-CN: 基于可配置的拒绝和允许正则规则，拦截大模型请求中的恶意提示词。
+  iconUrl: https://img.alicdn.com/imgextra/i1/O1CN018iKKih1iVx287RltL_!!6000000004419-2-tps-42-42.png
+  readmeUrl: https://github.com/alibaba/higress/blob/main/plugins/wasm-go/extensions/ai-prompt-guard/README.md
+  x-readmeUrl-i18n:
+    en-US: https://github.com/alibaba/higress/blob/main/plugins/wasm-go/extensions/ai-prompt-guard/README_EN.md
+  version: 1.0.0
+  contact:
+    name: Higress Team
+spec:
+  phase: default
+  priority: 300
+  configSchema:
+    openAPIV3Schema:
+      type: object
+      properties:
+        deny_patterns:
+          type: array
+          title: 拒绝规则列表
+          x-title-i18n:
+            en-US: Deny Patterns
+          description: 用于拦截恶意提示词的正则表达式列表，匹配到的请求将被拒绝
+          x-description-i18n:
+            en-US: Regex patterns to block malicious prompts. Matched requests will be denied
+          items:
+            type: string
+            example:
+              - "ignore.*previous.*instructions"
+              - "system.*prompt"
+        allow_patterns:
+          type: array
+          title: 允许规则列表
+          x-title-i18n:
+            en-US: Allow Patterns
+          description: 用于显式允许的正则表达式列表，匹配到的内容将绕过拒绝规则检查
+          x-description-i18n:
+            en-US: Regex patterns to explicitly allow. Matched content will bypass deny pattern checks
+          items:
+            type: string
+            example:
+              - "safe.*query"
+        deny_code:
+          type: integer
+          title: 拒绝状态码
+          x-title-i18n:
+            en-US: Deny Status Code
+          description: 请求被拦截时返回的HTTP状态码
+          x-description-i18n:
+            en-US: HTTP status code returned when the request is denied
+          default: 403
+        deny_message:
+          type: string
+          title: 拒绝响应消息
+          x-title-i18n:
+            en-US: Deny Message
+          description: 请求被拦截时返回的响应消息
+          x-description-i18n:
+            en-US: Response message returned when the request is denied
+          default: "Request blocked by prompt guard"
+        case_sensitive:
+          type: boolean
+          title: 区分大小写
+          x-title-i18n:
+            en-US: Case Sensitive
+          description: 正则匹配时是否区分大小写，默认不区分
+          x-description-i18n:
+            en-US: Whether regex matching is case-sensitive. Default is case-insensitive
+          default: false
+      example:
+        deny_patterns:
+          - "ignore.*previous.*instructions"
+          - "system.*prompt"
+          - "jailbreak"
+        allow_patterns:
+          - "safe.*query"
+        deny_code: 403
+        deny_message: "Request blocked by prompt guard"
+        case_sensitive: false
+  routeConfigSchema:
+    openAPIV3Schema:
+      type: object
+      properties:
+        deny_patterns:
+          type: array
+          title: 拒绝规则列表
+          x-title-i18n:
+            en-US: Deny Patterns
+          description: 用于拦截恶意提示词的正则表达式列表，匹配到的请求将被拒绝
+          x-description-i18n:
+            en-US: Regex patterns to block malicious prompts. Matched requests will be denied
+          items:
+            type: string
+            example:
+              - "ignore.*previous.*instructions"
+              - "system.*prompt"
+        allow_patterns:
+          type: array
+          title: 允许规则列表
+          x-title-i18n:
+            en-US: Allow Patterns
+          description: 用于显式允许的正则表达式列表，匹配到的内容将绕过拒绝规则检查
+          x-description-i18n:
+            en-US: Regex patterns to explicitly allow. Matched content will bypass deny pattern checks
+          items:
+            type: string
+            example:
+              - "safe.*query"
+        deny_code:
+          type: integer
+          title: 拒绝状态码
+          x-title-i18n:
+            en-US: Deny Status Code
+          description: 请求被拦截时返回的HTTP状态码
+          x-description-i18n:
+            en-US: HTTP status code returned when the request is denied
+          default: 403
+        deny_message:
+          type: string
+          title: 拒绝响应消息
+          x-title-i18n:
+            en-US: Deny Message
+          description: 请求被拦截时返回的响应消息
+          x-description-i18n:
+            en-US: Response message returned when the request is denied
+          default: "Request blocked by prompt guard"
+        case_sensitive:
+          type: boolean
+          title: 区分大小写
+          x-title-i18n:
+            en-US: Case Sensitive
+          description: 正则匹配时是否区分大小写，默认不区分
+          x-description-i18n:
+            en-US: Whether regex matching is case-sensitive. Default is case-insensitive
+          default: false
+      example:
+        deny_patterns:
+          - "ignore.*previous.*instructions"
+          - "system.*prompt"
+          - "jailbreak"
+        allow_patterns:
+          - "safe.*query"
+        deny_code: 403
+        deny_message: "Request blocked by prompt guard"
+        case_sensitive: false

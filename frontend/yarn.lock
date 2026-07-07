@@ -620,7 +620,7 @@
     "@antv/util" "^2.0.9"
     insert-css "^2.0.0"
 
-"@antv/g6@^4.2.4":
+"@antv/g6@^4.2.4", "@antv/g6@4.8.7":
   version "4.8.7"
   resolved "https://registry.npmmirror.com/@antv/g6/-/g6-4.8.7.tgz"
   integrity sha512-80kk9EHsVynWRROW8VjkjxTTbu23ZLC/06bkar01c5ANQcmpJFPfVrnvYTbk67EAym8zXhHHn68CQ2XMXmkPOQ==
@@ -2379,6 +2379,11 @@
     workbox-routing "6.4.2"
     workbox-strategies "6.4.2"
 
+"@builder/swc-linux-x64-gnu@^0.1.0":
+  version "0.1.3"
+  resolved "https://registry.npmmirror.com/@builder/swc-linux-x64-gnu/-/swc-linux-x64-gnu-0.1.3.tgz"
+  integrity sha512-YV2T5RFb19Lo2KzAuwIKRXyTxtLNxb/UfNuZ3xdNDLX5p8jaCw1U3X8q1sCY7phXcHz2w9drdXlK/om+0zPfjw==
+
 "@builder/swc-loader@^1.0.0":
   version "1.0.1"
   resolved "https://registry.npmmirror.com/@builder/swc-loader/-/swc-loader-1.0.1.tgz"
@@ -2386,11 +2391,6 @@
   dependencies:
     "@builder/swc" "^0.1.0"
     loader-utils "^2.0.0"
-
-"@builder/swc-win32-x64-msvc@^0.1.0":
-  version "0.1.3"
-  resolved "https://registry.npmmirror.com/@builder/swc-win32-x64-msvc/-/swc-win32-x64-msvc-0.1.3.tgz"
-  integrity sha512-BAc63zk6gAm9kvG+lpnevDoeVD7l9QLpM9MYZjTN/UnHhh/zl2lVCVj+ivSI3LpJZNVMG6OLQtAYAtmWNT83cQ==
 
 "@builder/swc@^0.1.0":
   version "0.1.3"
@@ -2616,10 +2616,10 @@
   resolved "https://registry.npmmirror.com/@emotion/unitless/-/unitless-0.7.5.tgz"
   integrity sha512-OWORNpfjMsSSUBVrRBVGECkhWcULOAJz9ZW8uK9qgxD+87M7jHRcvh/A96XXNhXTLmKcoYSQtBEX7lHMO7YRwg==
 
-"@esbuild/win32-x64@0.16.17":
+"@esbuild/linux-x64@0.16.17":
   version "0.16.17"
-  resolved "https://registry.npmmirror.com/@esbuild/win32-x64/-/win32-x64-0.16.17.tgz"
-  integrity sha512-y+EHuSchhL7FjHgvQL/0fnnFmO4T1bhvWANX6gcnqTjtnKWbTvUMCpGnv2+t+31d7RzyEAYAd4u2fnIhHL6N/Q==
+  resolved "https://registry.npmmirror.com/@esbuild/linux-x64/-/linux-x64-0.16.17.tgz"
+  integrity sha512-mdPjPxfnmoqhgpiEArqi4egmBAMYvaObgn4poorpUaqmvzzbvqbowRllQ+ZgzGVMGKaPkqUmPDOOFQRUFDmeUw==
 
 "@eslint-community/eslint-utils@^4.2.0":
   version "4.4.0"
@@ -3564,10 +3564,15 @@
     "@svgr/plugin-svgo" "^5.5.0"
     loader-utils "^2.0.0"
 
-"@swc/core-win32-x64-msvc@1.3.19":
+"@swc/core-linux-x64-gnu@1.3.19":
   version "1.3.19"
-  resolved "https://registry.npmmirror.com/@swc/core-win32-x64-msvc/-/core-win32-x64-msvc-1.3.19.tgz"
-  integrity sha512-0X5HqFC1wQlheOQDZeF6KNOSURZKkGISNK3aTSmTq9g7dDJ/kTcVjsdKbu2rK4ibCnlC9IS0cLK9FpROnsVPwA==
+  resolved "https://registry.npmmirror.com/@swc/core-linux-x64-gnu/-/core-linux-x64-gnu-1.3.19.tgz"
+  integrity sha512-dUbq8mnIqBhU7OppfY3ncOvl26691WFGxd97QtnnlfMZrKnaofKFMIxE9sTHOLSbBo16AylnEMiwa45w2UWDEg==
+
+"@swc/core-linux-x64-musl@1.3.19":
+  version "1.3.19"
+  resolved "https://registry.npmmirror.com/@swc/core-linux-x64-musl/-/core-linux-x64-musl-1.3.19.tgz"
+  integrity sha512-RiVZrlkNGcj9jZyjF7YFOW3fj9fWPC25AYkknLpWxAmLQcp1piAWj+aSixmMWUC4QJau78VZzcm+kRgIOECALw==
 
 "@swc/core@1.3.19":
   version "1.3.19"
@@ -5648,9 +5653,9 @@ caniuse-api@^3.0.0:
     lodash.uniq "^4.5.0"
 
 caniuse-lite@^1.0.0, caniuse-lite@^1.0.30001109, caniuse-lite@^1.0.30001431, caniuse-lite@^1.0.30001434, caniuse-lite@^1.0.30001449, caniuse-lite@^1.0.30001464:
-  version "1.0.30001718"
-  resolved "https://registry.npmjs.org/caniuse-lite/-/caniuse-lite-1.0.30001718.tgz"
-  integrity sha512-AflseV1ahcSunK53NfEs9gFWgOEmzr0f+kaMFA4xiLZlr9Hzt7HxcSpIFcnNCUkz6R6dWKa54rUz3HUmI3nVcw==
+  version "1.0.30001790"
+  resolved "https://registry.npmmirror.com/caniuse-lite/-/caniuse-lite-1.0.30001790.tgz"
+  integrity sha512-bOoxfJPyYo+ds6W0YfptaCWbFnJYjh2Y1Eow5lRv+vI2u8ganPZqNm1JwNh0t2ELQCqIWg4B3dWEusgAmsoyOw==
 
 case-sensitive-paths-webpack-plugin@^2.4.0:
   version "2.4.0"
@@ -7373,10 +7378,10 @@ es6-promise@^4.1.1:
   resolved "https://registry.npmmirror.com/es6-promise/-/es6-promise-4.2.8.tgz"
   integrity sha512-HJDGx5daxeIvxdBxvG2cb9g4tEvwIk3i8+nhX0yGrYmZUzbkdg8QbDevheDB8gd0//uPj4c1EQua8Q+MViT0/w==
 
-esbuild-windows-64@0.14.54:
+esbuild-linux-64@0.14.54:
   version "0.14.54"
-  resolved "https://registry.npmmirror.com/esbuild-windows-64/-/esbuild-windows-64-0.14.54.tgz"
-  integrity sha512-AoHTRBUuYwXtZhjXZbA1pGfTo8cJo3vZIcWGLiUcTNgHpJJMC1rVA44ZereBHMJtotyN71S8Qw0npiCIkW96cQ==
+  resolved "https://registry.npmmirror.com/esbuild-linux-64/-/esbuild-linux-64-0.14.54.tgz"
+  integrity sha512-EgjAgH5HwTbtNsTqQOXWApBaPVdDn7XcK+/PtJwZLT1UmpLoznPd8c5CxqsH2dQK3j05YsB3L17T8vE7cp4cCg==
 
 esbuild@^0.14.22:
   version "0.14.54"

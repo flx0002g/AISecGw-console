@@ -137,6 +137,13 @@ public class KubernetesClientService {
     @Getter
     private final String clusterDomainSuffix;
 
+    /**
+     * Expose the ApiClient for services that need direct K8s API access (e.g. reading pod logs).
+     */
+    public ApiClient getApiClient() {
+        return client;
+    }
+
     public KubernetesClientService(HigressServiceConfig config) throws IOException {
         validateConfig(config);
 

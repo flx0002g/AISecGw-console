@@ -47,6 +47,11 @@ class HigressServiceProviderImpl implements HigressServiceProvider {
     private final AiRouteService aiRouteService;
     private final LlmProviderService llmProviderService;
     private final McpServerService mcpServerService;
+    private final ShadowAiService shadowAiService;
+    private final AgentGuardService agentGuardService;
+    private final AuditChainService auditChainService;
+    private final BehaviorAnalysisService behaviorAnalysisService;
+    private final AuditLogCollectorService auditLogCollectorService;
 
     HigressServiceProviderImpl(HigressServiceConfig config) throws IOException {
         kubernetesClientService = new KubernetesClientService(config);
@@ -74,6 +79,12 @@ class HigressServiceProviderImpl implements HigressServiceProvider {
         ((LlmProviderServiceImpl)llmProviderService).setAiRouteService(aiRouteService);
         mcpServerService = new McpServiceContextImpl(kubernetesClientService, kubernetesModelConverter,
             wasmPluginInstanceService, consumerService, routeService);
+        shadowAiService = new ShadowAiServiceImpl(wasmPluginInstanceService, consumerService, aiRouteService, null);
+        agentGuardService = new AgentGuardServiceImpl(null, 0);
+        auditChainService = new AuditChainServiceImpl(null, 0);
+        behaviorAnalysisService = new BehaviorAnalysisServiceImpl(null, 0);
+        auditLogCollectorService = new AuditLogCollectorService(kubernetesClientService.getApiClient(),
+            auditChainService);
     }
 
     @Override
@@ -144,5 +155,30 @@ class HigressServiceProviderImpl implements HigressServiceProvider {
     @Override
     public McpServerService mcpServerService() {
         return mcpServerService;
+    }
+
+    @Override
+    public ShadowAiService shadowAiService() {
+        return shadowAiService;
+    }
+
+    @Override
+    public AgentGuardService agentGuardService() {
+        return agentGuardService;
+    }
+
+    @Override
+    public AuditChainService auditChainService() {
+        return auditChainService;
+    }
+
+    @Override
+    public BehaviorAnalysisService behaviorAnalysisService() {
+        return behaviorAnalysisService;
+    }
+
+    @Override
+    public AuditLogCollectorService auditLogCollectorService() {
+        return auditLogCollectorService;
     }
 }

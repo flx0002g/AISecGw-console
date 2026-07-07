@@ -26,4 +26,11 @@ public class KeyAuthConfig {
 
     public static final String ALLOW = "allow";
     public static final String GLOBAL_AUTH = "global_auth";
+
+    /**
+     * identify_only 配置：仅识别模式。
+     * 当设置为 true 时，key-auth 插件会识别合法消费者并设置 x-mse-consumer 头，
+     * 但不拒绝未认证请求。用于影子AI监控模式，使 ai-statistics 能记录消费者身份。
+     */
+    public static final String IDENTIFY_ONLY = "identify_only";
 }

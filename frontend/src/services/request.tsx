@@ -3,6 +3,12 @@ import axios from "axios";
 import i18next from 'i18next';
 import { ErrorComp } from './exception';
 
+/** Dedup window for repeated error modals (ms). Prevents modal stacking during polling. */
+const ERROR_DEDUP_MS = 5000;
+let modalShown = false;
+let lastErrorTime = 0;
+let lastErrorKey = '';
+
 const request = axios.create({
   timeout: 5 * 1000,
   baseURL: process.env.ICE_CORE_MODE === "development" ? "/api" : "",
@@ -73,12 +79,29 @@ request.interceptors.response.use(
 );
 
 function showErrorModal(message: string, config: object, code?: number) {
-  Modal.warning({
+  // Singleton + dedup: prevent modal stacking when 30s polling hits a failing backend.
+  const now = Date.now();
+  const dedupKey = `${code || ''}:${message}`;
+  if (modalShown || (now - lastErrorTime < ERROR_DEDUP_MS && lastErrorKey === dedupKey)) {
+    return;
+  }
+  modalShown = true;
+  lastErrorTime = now;
+  lastErrorKey = dedupKey;
+  const modal = Modal.warning({
     title: i18next.t('misc.error'),
     content: <ErrorComp content={message} options={config} code={code} />,
     okText: i18next.t('misc.close'),
     width: 560,
+    afterClose: () => {
+      modalShown = false;
+    },
   });
+  // Auto-clear dedup window after ERROR_DEDUP_MS so transient errors can resurface.
+  setTimeout(() => {
+    lastErrorTime = 0;
+    lastErrorKey = '';
+  }, ERROR_DEDUP_MS);
 }
 
 export default request;

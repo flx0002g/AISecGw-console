@@ -1,5 +1,5 @@
 # Multi-stage build for WntASG Console
-# Stage 1: Build backend (includes frontend build via frontend-maven-plugin)
+# Stage 1: Build backend (frontend is pre-built on host)
 FROM docker.m.daocloud.io/library/eclipse-temurin:21-jdk AS builder
 
 WORKDIR /build
@@ -14,12 +14,14 @@ COPY backend/console/pom.xml console/pom.xml
 # Download dependencies (cached layer)
 RUN ./mvnw dependency:go-offline -Dmaven.test.skip=true -Dpmd.skip=true -Dcheckstyle.skip=true -Dgpg.sign.skip=true -Denforcer.skip=true -Dlombok.delombok.skip=true -Dmaven.javadoc.skip=true -Dmaven.source.skip=true 2>&1 || true
 
-# Copy all source code
+# Copy backend source code
 COPY backend/ .
-COPY frontend/ ../frontend/
 
-# Build the project (skip git-commit-id plugin since no .git in Docker context)
-RUN ./mvnw clean package -Dmaven.test.skip=true -Dpmd.skip=true -Dcheckstyle.skip=true -Dgpg.sign.skip=true -Denforcer.skip=true -Dlombok.delombok.skip=true -Dmaven.javadoc.skip=true -Dmaven.source.skip=true -Dapp.build.dev=false
+# Copy pre-built frontend into backend static resources (skip frontend-maven-plugin)
+COPY frontend/build/ console/src/main/resources/static/
+
+# Build the project (skip frontend build, checkstyle, etc.)
+RUN ./mvnw clean package -Dmaven.test.skip=true -Dpmd.skip=true -Dcheckstyle.skip=true -Dgpg.sign.skip=true -Denforcer.skip=true -Dlombok.delombok.skip=true -Dmaven.javadoc.skip=true -Dmaven.source.skip=true -Dapp.build.dev=false -Dskip.frontend=true
 
 # Stage 2: Runtime image
 FROM docker.m.daocloud.io/library/eclipse-temurin:21-jre

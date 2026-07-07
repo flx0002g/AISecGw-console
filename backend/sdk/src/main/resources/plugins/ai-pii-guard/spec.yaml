@@ -1,0 +1,181 @@
+apiVersion: 1.0.0
+info:
+  gatewayMinVersion: "2.0.0"
+  type: enterprise
+  category: ai
+  image: platform_wasm/ai-pii-guard
+  name: ai-pii-guard
+  title: AI PII Guard
+  x-title-i18n:
+    zh-CN: AI 个人信息脱敏
+  description: Detect and mask Personally Identifiable Information (PII) in LLM request and response content using configurable regex rules.
+  x-description-i18n:
+    zh-CN: 基于可配置的正则规则，检测并脱敏大模型请求和响应中的个人隐私信息（PII）。
+  iconUrl: https://img.alicdn.com/imgextra/i1/O1CN018iKKih1iVx287RltL_!!6000000004419-2-tps-42-42.png
+  readmeUrl: https://github.com/alibaba/higress/blob/main/plugins/wasm-go/extensions/ai-pii-guard/README.md
+  x-readmeUrl-i18n:
+    en-US: https://github.com/alibaba/higress/blob/main/plugins/wasm-go/extensions/ai-pii-guard/README_EN.md
+  version: 1.0.0
+  contact:
+    name: Higress Team
+spec:
+  phase: default
+  priority: 300
+  configSchema:
+    openAPIV3Schema:
+      type: object
+      properties:
+        protect_request:
+          type: boolean
+          title: 脱敏请求内容
+          x-title-i18n:
+            en-US: Protect Request
+          description: 是否对请求中的个人隐私信息进行脱敏处理
+          x-description-i18n:
+            en-US: Whether to mask PII in request content
+          default: true
+        protect_response:
+          type: boolean
+          title: 脱敏响应内容
+          x-title-i18n:
+            en-US: Protect Response
+          description: 是否对响应中的个人隐私信息进行脱敏处理
+          x-description-i18n:
+            en-US: Whether to mask PII in response content
+          default: false
+        log_matches:
+          type: boolean
+          title: 记录匹配日志
+          x-title-i18n:
+            en-US: Log Matches
+          description: 是否在日志中记录PII匹配信息（不记录实际值）
+          x-description-i18n:
+            en-US: Whether to log PII match information (without actual values)
+          default: true
+        rules:
+          type: array
+          title: PII检测规则
+          x-title-i18n:
+            en-US: PII Detection Rules
+          description: 自定义PII检测规则列表，为空时使用内置默认规则
+          x-description-i18n:
+            en-US: Custom PII detection rules list. Built-in default rules are used when empty
+          items:
+            type: object
+            properties:
+              name:
+                type: string
+                title: 规则名称
+                x-title-i18n:
+                  en-US: Rule Name
+                description: 规则名称，用于日志记录
+                x-description-i18n:
+                  en-US: Rule name for logging
+              pattern:
+                type: string
+                title: 正则表达式
+                x-title-i18n:
+                  en-US: Regex Pattern
+                description: 用于匹配PII的正则表达式
+                x-description-i18n:
+                  en-US: Regex pattern to match PII
+              replacement:
+                type: string
+                title: 替换文本
+                x-title-i18n:
+                  en-US: Replacement Text
+                description: 匹配到的PII的替换文本，支持$1、$2等捕获组
+                x-description-i18n:
+                  en-US: Replacement text for matched PII, supports $1, $2 capture groups
+                default: "[REDACTED]"
+            required: [name, pattern]
+      example:
+        protect_request: true
+        protect_response: false
+        log_matches: true
+        rules:
+          - name: email
+            pattern: "\\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Z|a-z]{2,}\\b"
+            replacement: "[EMAIL_REDACTED]"
+          - name: phone_cn
+            pattern: "\\b1[3-9]\\d{9}\\b"
+            replacement: "[PHONE_REDACTED]"
+  routeConfigSchema:
+    openAPIV3Schema:
+      type: object
+      properties:
+        protect_request:
+          type: boolean
+          title: 脱敏请求内容
+          x-title-i18n:
+            en-US: Protect Request
+          description: 是否对请求中的个人隐私信息进行脱敏处理
+          x-description-i18n:
+            en-US: Whether to mask PII in request content
+          default: true
+        protect_response:
+          type: boolean
+          title: 脱敏响应内容
+          x-title-i18n:
+            en-US: Protect Response
+          description: 是否对响应中的个人隐私信息进行脱敏处理
+          x-description-i18n:
+            en-US: Whether to mask PII in response content
+          default: false
+        log_matches:
+          type: boolean
+          title: 记录匹配日志
+          x-title-i18n:
+            en-US: Log Matches
+          description: 是否在日志中记录PII匹配信息（不记录实际值）
+          x-description-i18n:
+            en-US: Whether to log PII match information (without actual values)
+          default: true
+        rules:
+          type: array
+          title: PII检测规则
+          x-title-i18n:
+            en-US: PII Detection Rules
+          description: 自定义PII检测规则列表，为空时使用内置默认规则
+          x-description-i18n:
+            en-US: Custom PII detection rules list. Built-in default rules are used when empty
+          items:
+            type: object
+            properties:
+              name:
+                type: string
+                title: 规则名称
+                x-title-i18n:
+                  en-US: Rule Name
+                description: 规则名称，用于日志记录
+                x-description-i18n:
+                  en-US: Rule name for logging
+              pattern:
+                type: string
+                title: 正则表达式
+                x-title-i18n:
+                  en-US: Regex Pattern
+                description: 用于匹配PII的正则表达式
+                x-description-i18n:
+                  en-US: Regex pattern to match PII
+              replacement:
+                type: string
+                title: 替换文本
+                x-title-i18n:
+                  en-US: Replacement Text
+                description: 匹配到的PII的替换文本，支持$1、$2等捕获组
+                x-description-i18n:
+                  en-US: Replacement text for matched PII, supports $1, $2 capture groups
+                default: "[REDACTED]"
+            required: [name, pattern]
+      example:
+        protect_request: true
+        protect_response: false
+        log_matches: true
+        rules:
+          - name: email
+            pattern: "\\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Z|a-z]{2,}\\b"
+            replacement: "[EMAIL_REDACTED]"
+          - name: phone_cn
+            pattern: "\\b1[3-9]\\d{9}\\b"
+            replacement: "[PHONE_REDACTED]"
