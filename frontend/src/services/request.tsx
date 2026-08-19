@@ -2,6 +2,7 @@ import { Modal } from "antd";
 import axios from "axios";
 import i18next from 'i18next';
 import { ErrorComp } from './exception';
+import { resolveRequestTimeout } from './timeout';
 
 /** Dedup window for repeated error modals (ms). Prevents modal stacking during polling. */
 const ERROR_DEDUP_MS = 5000;
@@ -10,7 +11,7 @@ let lastErrorTime = 0;
 let lastErrorKey = '';
 
 const request = axios.create({
-  timeout: 5 * 1000,
+  timeout: resolveRequestTimeout(),
   baseURL: process.env.ICE_CORE_MODE === "development" ? "/api" : "",
   headers: {
     "Content-Type": "application/json",
