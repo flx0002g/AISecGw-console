@@ -19,28 +19,17 @@ import javax.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.scheduling.annotation.EnableScheduling;
-import org.springframework.scheduling.annotation.Scheduled;
-import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler;
 
 import com.alibaba.higress.console.constant.SystemConfigKey;
-import com.alibaba.higress.console.service.impl.AgentAuditPersistenceService;
 import com.alibaba.higress.sdk.config.HigressServiceConfig;
 import com.alibaba.higress.sdk.constant.HigressConstants;
 import com.alibaba.higress.sdk.model.wasmplugin.WasmPluginServiceConfig;
-import com.alibaba.higress.sdk.service.AgentGuardService;
-import com.alibaba.higress.sdk.service.AuditChainService;
-import com.alibaba.higress.sdk.service.AuditChainServiceImpl;
-import com.alibaba.higress.sdk.service.AuditLogCollectorService;
-import com.alibaba.higress.sdk.service.BehaviorAnalysisService;
 import com.alibaba.higress.sdk.service.DomainService;
 import com.alibaba.higress.sdk.service.HigressServiceProvider;
 import com.alibaba.higress.sdk.service.ProxyServerService;
 import com.alibaba.higress.sdk.service.RouteService;
 import com.alibaba.higress.sdk.service.ServiceService;
 import com.alibaba.higress.sdk.service.ServiceSourceService;
-import com.alibaba.higress.sdk.service.AgentGuardService;
-import com.alibaba.higress.sdk.service.ShadowAiService;
 import com.alibaba.higress.sdk.service.TlsCertificateService;
 import com.alibaba.higress.sdk.service.WasmPluginInstanceService;
 import com.alibaba.higress.sdk.service.WasmPluginService;
@@ -51,10 +40,8 @@ import com.alibaba.higress.sdk.service.kubernetes.KubernetesClientService;
 import com.alibaba.higress.sdk.service.kubernetes.KubernetesModelConverter;
 import com.alibaba.higress.sdk.service.mcp.McpServerHelper;
 import com.alibaba.higress.sdk.service.mcp.McpServerService;
-import com.alibaba.higress.sdk.service.RedisAuditSyncService;
 
 @Configuration
-@EnableScheduling
 public class SdkConfig {
 
     @Value("${" + SystemConfigKey.KUBE_CONFIG_KEY + ":}")
@@ -178,156 +165,5 @@ public class SdkConfig {
     @Bean
     public McpServerHelper mcpServerHelper() {
         return new McpServerHelper();
-    }
-
-    @Bean
-    public ShadowAiService shadowAiService() {
-        return serviceProvider.shadowAiService();
-    }
-
-    @Bean
-    public AgentGuardService agentGuardService() {
-        return serviceProvider.agentGuardService();
-    }
-
-    @Bean
-    public AuditChainService auditChainService(AgentAuditPersistenceService auditSink) {
-        AuditChainService service = serviceProvider.auditChainService();
-        if (service instanceof AuditChainServiceImpl) {
-            ((AuditChainServiceImpl) service).setAuditLogSink(auditSink);
-        }
-        return service;
-    }
-
-    @Bean
-    public BehaviorAnalysisService behaviorAnalysisService() {
-        return serviceProvider.behaviorAnalysisService();
-    }
-
-    @Bean
-    public AuditLogCollectorService auditLogCollectorService() {
-        return serviceProvider.auditLogCollectorService();
-    }
-
-    /**
-     * Incremental Redis → MySQL audit sync (IR-015): covers entries written
-     * directly by Wasm plugins which bypass the stdout collector path.
-     * Self-schedules on a daemon thread; no periodic hook needed here.
-     */
-    @Bean
-    public RedisAuditSyncService redisAuditSyncService(AgentAuditPersistenceService auditSink) {
-        return new RedisAuditSyncService(null, 0, auditSink);
-    }
-    /**
-     * Cleanup task thread pool config for @Scheduled audit cleanup.
-     */
-    @Bean
-    public ThreadPoolTaskScheduler auditCleanupTaskScheduler() {
-        ThreadPoolTaskScheduler scheduler = new ThreadPoolTaskScheduler();
-        scheduler.setPoolSize(1);
-        scheduler.setThreadNamePrefix("audit-cleanup-sched-");
-        scheduler.setWaitForTasksToCompleteOnShutdown(true);
-        scheduler.setAwaitTerminationSeconds(30);
-        return scheduler;
-    }
-
-    /**
-     * Run expired audit log cleanup every hour.
-     */
-    @Scheduled(fixedRate = 3600000)
-    public void scheduledAuditCleanup() {
-        if (serviceProvider != null) {
-            serviceProvider.auditChainService().cleanupExpiredLogs();
-        }
-    }
-
-    /**
-     * 行为分析任务线程池（方案 5.7）。
-     * 画像构建、基线重算、风险检测共享线程池，poolSize=2 避免任务间相互阻塞。
-     */
-    @Bean
-    public ThreadPoolTaskScheduler behaviorAnalysisTaskScheduler() {
-        ThreadPoolTaskScheduler scheduler = new ThreadPoolTaskScheduler();
-        scheduler.setPoolSize(2);
-        scheduler.setThreadNamePrefix("behavior-analysis-sched-");
-        scheduler.setWaitForTasksToCompleteOnShutdown(true);
-        scheduler.setAwaitTerminationSeconds(60);
-        return scheduler;
-    }
-
-    /**
-     * 行为画像增量构建，每 60 秒触发一次（方案 5.7）。
-     */
-    @Scheduled(fixedRate = 60000)
-    public void scheduledProfileUpdate() {
-        if (serviceProvider != null) {
-            try {
-                serviceProvider.behaviorAnalysisService().rebuildProfiles();
-            } catch (Exception e) {
-                // 静默吞掉异常，避免调度器因异常终止后续执行
-            }
-        }
-    }
-
-    /**
-     * 行为基线 EMA 重算，每 1 小时触发一次（方案 5.7）。
-     */
-    @Scheduled(fixedRate = 3600000)
-    public void scheduledBaselineRebuild() {
-        if (serviceProvider != null) {
-            try {
-                serviceProvider.behaviorAnalysisService().rebuildBaselines();
-            } catch (Exception e) {
-                // 静默吞掉异常，避免调度器因异常终止后续执行
-            }
-        }
-    }
-
-    /**
-     * 行为风险检测，每 5 秒触发一次（演示场景加速，生产可调回 60s）。
-     * Phase 3 实现 runRiskDetection 的 6 类规则。
-     */
-    @Scheduled(fixedRate = 5000)
-    public void scheduledRiskDetection() {
-        if (serviceProvider != null) {
-            try {
-                serviceProvider.behaviorAnalysisService().runRiskDetection();
-            } catch (Exception e) {
-                // 静默吞掉异常，避免调度器因异常终止后续执行
-            }
-        }
-    }
-
-    /**
-     * 误报复盘任务，每日 03:00 触发一次（方案 9.2 / 阶段五 任务 3）。
-     * 聚合 24h 内 false_positive 率，>30% 自动上调阈值，>50% 暂停自动阻断 + 临时白名单。
-     * 使用 cron 表达式避开高峰期，凌晨执行减少对实时检测的影响。
-     */
-    @Scheduled(cron = "0 0 3 * * ?")
-    public void scheduledRuleFeedback() {
-        if (serviceProvider != null) {
-            try {
-                serviceProvider.behaviorAnalysisService().runRuleFeedback();
-            } catch (Exception e) {
-                // 静默吞掉异常，避免调度器因异常终止后续执行
-            }
-        }
-    }
-
-    /**
-     * 审计日志采集任务，每 30 秒从 gateway pod stdout 读取 ai_log，
-     * 解析 agent_guard_audit 字段并写入 Redis 审计链。
-     * 用于 Wasm 运行时不支持 Redis host function 时的兜底采集方案。
-     * sinceSeconds=90 覆盖约 3 个采集周期，保证不遗漏。
-     */
-    @Scheduled(fixedRate = 30000, initialDelay = 15000)
-    public void scheduledAuditLogCollection() {
-        if (serviceProvider != null) {
-            try {
-                serviceProvider.auditLogCollectorService().collect(90);
-            } catch (Exception e) {
-                // 静默吞掉异常，避免调度器因异常终止后续执行
-            }
-        }
     }
 }

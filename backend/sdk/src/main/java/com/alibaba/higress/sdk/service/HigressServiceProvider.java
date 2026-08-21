@@ -58,19 +58,4 @@ public interface HigressServiceProvider {
     LlmProviderService llmProviderService();
 
     McpServerService mcpServerService();
-
-    ShadowAiService shadowAiService();
-
-    AgentGuardService agentGuardService();
-
-    AuditChainService auditChainService();
-
-    BehaviorAnalysisService behaviorAnalysisService();
-
-    /**
-     * Collector that reads gateway pod stdout logs and persists agent_guard_audit
-     * entries to the Redis audit chain. Used when the Wasm Redis host function is
-     * unavailable.
-     */
-    AuditLogCollectorService auditLogCollectorService();
 }
