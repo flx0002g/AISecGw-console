@@ -32,6 +32,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.alibaba.higress.console.controller.dto.Response;
 import com.alibaba.higress.console.controller.util.ControllerUtil;
+import com.alibaba.higress.console.service.impl.AgentAuditPersistenceService;
 import com.alibaba.higress.sdk.service.AuditChainService;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -50,6 +51,13 @@ public class AuditChainController {
     @Resource
     public void setAuditChainService(AuditChainService auditChainService) {
         this.auditChainService = auditChainService;
+    }
+
+    private AgentAuditPersistenceService auditPersistenceService;
+
+    @Resource
+    public void setAuditPersistenceService(AgentAuditPersistenceService auditPersistenceService) {
+        this.auditPersistenceService = auditPersistenceService;
     }
 
     @GetMapping("/config")
@@ -130,6 +138,10 @@ public class AuditChainController {
     @ApiResponses({@ApiResponse(responseCode = "200", description = "Success")})
     public ResponseEntity<Void> cleanupExpiredLogs() {
         auditChainService.cleanupExpiredLogs();
+        // MySQL side retention (IR-057): drop rows older than max_days as well.
+        if (auditPersistenceService != null) {
+            auditPersistenceService.cleanupExpiredLogs();
+        }
         return ResponseEntity.ok().build();
     }
 

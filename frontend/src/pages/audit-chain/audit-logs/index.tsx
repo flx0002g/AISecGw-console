@@ -56,12 +56,14 @@ interface AuditConfig {
   retention: {
     max_days: number;
   };
+  payloadMode: string;
 }
 
 const defaultConfig: AuditConfig = {
   enabled: false,
   recordTypes: { normal: true, blocked: true, degraded: true, security_event: true },
   retention: { max_days: 30 },
+  payloadMode: 'full',
 };
 
 const RECORD_TYPE_COLORS: Record<string, string> = {
@@ -102,6 +104,7 @@ const AuditLogsPage: React.FC = () => {
             security_event: data.record_types_security_event === true || data.record_types_security_event === 'true' || (data.recordTypes?.security_event ?? true),
           },
           retention: { max_days: parseInt(data.max_days) || (data.retention?.max_days ?? 30) },
+          payloadMode: data.payload_mode || (data.payloadMode ?? 'full'),
         });
       },
     },
@@ -158,6 +161,7 @@ const AuditLogsPage: React.FC = () => {
         record_types_degraded: cfg.recordTypes.degraded,
         record_types_security_event: cfg.recordTypes.security_event,
         max_days: cfg.retention.max_days,
+        payload_mode: cfg.payloadMode,
       };
       await updateAuditChainConfig(flatConfig);
       message.success(t('auditChain.saveSuccess'));
@@ -475,6 +479,23 @@ const AuditLogsPage: React.FC = () => {
                   <span>{t('auditChain.securityEvent')}</span>
                 </Space>
               </Space>
+            </Space>
+            <Divider type="vertical" />
+            <Space>
+              <span style={{ fontWeight: 500 }}>{t('auditChain.payloadMode')}</span>
+              <Select
+                value={config.payloadMode}
+                onChange={v => setConfig(prev => ({ ...prev, payloadMode: v }))}
+                style={{ width: 110 }}
+                options={[
+                  { value: 'full', label: t('auditChain.payloadModeFull') },
+                  { value: 'summary', label: t('auditChain.payloadModeSummary') },
+                  { value: 'none', label: t('auditChain.payloadModeNone') },
+                ]}
+              />
+              <Tooltip title={t('auditChain.payloadModeTip')}>
+                <span style={{ color: '#999', cursor: 'help' }}>?</span>
+              </Tooltip>
             </Space>
             <Divider type="vertical" />
             <Space>

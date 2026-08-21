@@ -24,11 +24,13 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler;
 
 import com.alibaba.higress.console.constant.SystemConfigKey;
+import com.alibaba.higress.console.service.impl.AgentAuditPersistenceService;
 import com.alibaba.higress.sdk.config.HigressServiceConfig;
 import com.alibaba.higress.sdk.constant.HigressConstants;
 import com.alibaba.higress.sdk.model.wasmplugin.WasmPluginServiceConfig;
 import com.alibaba.higress.sdk.service.AgentGuardService;
 import com.alibaba.higress.sdk.service.AuditChainService;
+import com.alibaba.higress.sdk.service.AuditChainServiceImpl;
 import com.alibaba.higress.sdk.service.AuditLogCollectorService;
 import com.alibaba.higress.sdk.service.BehaviorAnalysisService;
 import com.alibaba.higress.sdk.service.DomainService;
@@ -49,6 +51,7 @@ import com.alibaba.higress.sdk.service.kubernetes.KubernetesClientService;
 import com.alibaba.higress.sdk.service.kubernetes.KubernetesModelConverter;
 import com.alibaba.higress.sdk.service.mcp.McpServerHelper;
 import com.alibaba.higress.sdk.service.mcp.McpServerService;
+import com.alibaba.higress.sdk.service.RedisAuditSyncService;
 
 @Configuration
 @EnableScheduling
@@ -188,8 +191,12 @@ public class SdkConfig {
     }
 
     @Bean
-    public AuditChainService auditChainService() {
-        return serviceProvider.auditChainService();
+    public AuditChainService auditChainService(AgentAuditPersistenceService auditSink) {
+        AuditChainService service = serviceProvider.auditChainService();
+        if (service instanceof AuditChainServiceImpl) {
+            ((AuditChainServiceImpl) service).setAuditLogSink(auditSink);
+        }
+        return service;
     }
 
     @Bean
@@ -202,6 +209,15 @@ public class SdkConfig {
         return serviceProvider.auditLogCollectorService();
     }
 
+    /**
+     * Incremental Redis → MySQL audit sync (IR-015): covers entries written
+     * directly by Wasm plugins which bypass the stdout collector path.
+     * Self-schedules on a daemon thread; no periodic hook needed here.
+     */
+    @Bean
+    public RedisAuditSyncService redisAuditSyncService(AgentAuditPersistenceService auditSink) {
+        return new RedisAuditSyncService(null, 0, auditSink);
+    }
     /**
      * Cleanup task thread pool config for @Scheduled audit cleanup.
      */

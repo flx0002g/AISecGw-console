@@ -76,6 +76,12 @@ public class AuditChainServiceImpl implements AuditChainService {
     private final int redisPort;
     private final ScheduledExecutorService cleanupExecutor;
 
+    /**
+     * Optional long-term persistence sink (e.g. MySQL). Invoked asynchronously
+     * by the sink implementation; a sink outage never blocks the Redis path.
+     */
+    private volatile AuditLogSink auditLogSink;
+
     /** Redis Keys used when writing audit logs (mirrors Wasm plugin writeAuditToRedis). */
     private static final String AUDIT_USER_INDEX_PREFIX = "agent_audit:user:";
     private static final String AUDIT_AGENT_INDEX_PREFIX = "agent_audit:agent:";
@@ -130,6 +136,15 @@ public class AuditChainServiceImpl implements AuditChainService {
         this.cleanupExecutor = new ScheduledThreadPoolExecutor(1, new AuditCleanupThreadFactory());
     }
 
+    /**
+     * Set the optional audit log sink for long-term persistence (MySQL).
+     * Must be called before the collector starts writing, or any time later:
+     * entries written while the sink was null are back-filled by the Redis sync.
+     */
+    public void setAuditLogSink(AuditLogSink auditLogSink) {
+        this.auditLogSink = auditLogSink;
+    }
+
     private Jedis createJedis() {
         return new Jedis(redisHost, redisPort);
     }
@@ -149,8 +164,13 @@ public class AuditChainServiceImpl implements AuditChainService {
                 defaults.put("enabled", "true");
                 defaults.put("max_days", "7");
                 defaults.put("max_entries_per_session", "1000");
+                defaults.put("payload_mode", "full");
                 defaults.put("config_version", "0");
                 return defaults;
+            }
+            if (!config.containsKey("payload_mode")) {
+                // Configs written before IR-015 payload mode existed: default to full.
+                config.put("payload_mode", "full");
             }
             return new LinkedHashMap<>(config);
         } catch (JedisConnectionException e) {
@@ -582,9 +602,15 @@ public class AuditChainServiceImpl implements AuditChainService {
                 cursor = scanResult.getCursor();
 
                 for (String zsetKey : zsetKeys) {
-                    // Skip non-ZSET keys (e.g. agent_audit_config, agent_audit:cleanup_lock)
+                    // Skip non-ZSET keys (e.g. agent_audit_config, agent_audit:cleanup_lock,
+                    // agent_audit:sync_cursor, agent_audit_log: details)
                     if (zsetKey.equals(AUDIT_CONFIG_KEY) || zsetKey.equals(CLEANUP_LOCK_KEY)
                         || zsetKey.startsWith(AUDIT_LOG_PREFIX)) {
+                        continue;
+                    }
+                    // Defensive type check: SCAN may match string keys created by other
+                    // components (e.g. agent_audit:sync_cursor), ZRANGEBYSCORE would fail.
+                    if (!"zset".equals(jedis.type(zsetKey))) {
                         continue;
                     }
 
@@ -659,6 +685,26 @@ public class AuditChainServiceImpl implements AuditChainService {
             }
         } catch (JedisConnectionException e) {
             log.error("Failed to connect to Redis for writeAuditLog: event_id={}", eventId, e);
+        }
+        // Notify the long-term persistence sink regardless of Redis outcome:
+        // when Redis is down this is exactly when the MySQL fallback matters.
+        notifySink(auditEntryJson, eventId, sessionId, timestampMs, userId, identityTrusted, agentId);
+    }
+
+    /**
+     * Forward the entry to the optional persistence sink. The sink is
+     * asynchronous (queue + background flusher), so this call never blocks.
+     */
+    private void notifySink(String auditEntryJson, String eventId, String sessionId,
+        long timestampMs, String userId, boolean identityTrusted, String agentId) {
+        AuditLogSink sink = this.auditLogSink;
+        if (sink == null) {
+            return;
+        }
+        try {
+            sink.sink(auditEntryJson, eventId, sessionId, timestampMs, userId, identityTrusted, agentId);
+        } catch (Exception e) {
+            log.warn("Failed to notify audit log sink: event_id={}", eventId, e);
         }
     }
 
