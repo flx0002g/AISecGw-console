@@ -19,8 +19,6 @@ public final class BuiltInPluginName {
     public static final String AI_PROMPT_TEMPLATE = "ai-prompt-template";
     public static final String AI_RAG = "ai-rag";
     public static final String AI_SECURITY_GUARD = "ai-security-guard";
-    public static final String AI_PII_GUARD = "ai-pii-guard";
-    public static final String AI_PROMPT_GUARD = "ai-prompt-guard";
     public static final String AI_STATISTICS = "ai-statistics";
     public static final String AI_TOKEN_RATELIMIT = "ai-token-ratelimit";
     public static final String AI_TRANSFORMER = "ai-transformer";
@@ -30,7 +28,6 @@ public final class BuiltInPluginName {
     public static final String AI_INTENT = "ai-intent";
     public static final String AI_QUOTA = "ai-quota";
     public static final String AI_AGENT = "ai-agent";
-    public static final String SHADOW_AI_DETECT = "shadow-ai-detect";
     public static final String MODEL_ROUTER = "model-router";
     public static final String MODEL_MAPPER = "model-mapper";
     public static final String DEFAULT_MCP_PLUGIN = "mcp-server";
