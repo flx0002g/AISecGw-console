@@ -18,16 +18,21 @@
   （Maven 坐标 `com.asg:asg-console-extension:0.0.1-SNAPSHOT`，Spring Boot AutoConfiguration 装配）。
   **唯一集成点**：`backend/console/pom.xml` 中的一行依赖声明。
 - 自研 Wasm 插件：独立仓库 `/home/wnt/ASG/asg-wasm-plugins`。
+- 运行时配置（datasource/JPA/collector-token）：由 helm chart `asg.*` env + Secret 注入
+  （s3b-rest 步骤 1，`application.properties` 已恢复上游）。
 
-## 3. 剩余定制面清单（14 文件，全部有归属）
+## 3. 剩余定制面清单（全部有归属）
 
 | # | 定制面 | 文件 | 归属/处置 |
 | --- | --- | --- | --- |
 | 1 | NPE 防御 1 行 | `backend/sdk/src/main/java/com/alibaba/higress/sdk/service/WasmPluginServiceImpl.java` | 保留登记；可选提上游 PR 后自然归零 |
 | 2-9 | 插件目录资源（8 文件） | `backend/console/src/main/resources/plugins/plugins.properties`（+3 行）、`plugins/ai-pii-guard/`、`plugins/ai-prompt-guard/`、`plugins/shadow-ai-detect/`、`plugins/key-auth/spec.yaml`（identify_only 描述） | **不可外置**（classloader `getResourceAsStream` 单资源限制）；数据级定制，merge-only 覆盖 |
-| 10 | 应用配置 +10 行 | `backend/console/src/main/resources/application.properties`（MySQL/JPA/collector-token） | s3b-rest：asg-deploy 迁移时外置 ConfigMap |
-| 11-14 | 品牌/构建漂移 | `backend/Dockerfile`、`landing/index.html`、`backend/console/pom.xml`（构建参数）、根级 `.dockerignore`/`.gitignore`/`Dockerfile`/`build-and-deploy.sh` | s3b-rest：品牌参数化 + asg-deploy 迁移 |
+| 10 | 镜像源 1 行 | `backend/Dockerfile`（daocloud mirror FROM + 注释） | 国内拉取必需，保留登记 |
+| 11 | 集成点 + 构建参数 | `backend/console/pom.xml`（asg-console-extension 依赖 1 块；node 22.22.2 / app.build.* / skip.frontend / caniuse 与 git 参数） | 集成点为解耦架构本身；构建参数为功能性（近期构建证明必需），保留登记 |
+| 12 | .gitignore +1 行 | 根级 `.gitignore`（`frontend/i18n-check-results/`） | fork 工作目录忽略，保留登记 |
 
+已归零项：`application.properties`（s3b-rest 步骤 1）、`BuiltInPluginName`/`KeyAuthConfig`/`KubernetesClientService`/`backend/sdk/pom.xml`（s3a-console-ext）。
+非上游侵入（上游本无此文件，不计入定制面）：根级 `Dockerfile`/`.dockerignore`/`build-and-deploy.sh` —— fork 部署工具，归属 asg-deploy 条目。
 前端定制面（~38K 行，9 目录自研页面等）归属未来的前端解耦条目，不在本清单范围。
 
 ## 4. 上游合并流程（merge-only）
@@ -39,6 +44,7 @@
 5. 合并后验证（必须全绿才可提交）：
    - 扩展模块：`mvn test`（含 `UpstreamApiClientAccessor` 反射兼容性单测）
    - 全量编译：JDK11 + `-Dpmd.skip=true -Dcheckstyle.skip=true -Dgpg.sign.skip=true -Dmaven.javadoc.skip=true`
+   - 镜像构建：`docker build --build-arg TARGETARCH=amd64 -f backend/Dockerfile ...`（legacy builder 需显式 TARGETARCH）
 6. 定制面清单变化（文件数/行数增减）必须更新本文档并登记验收台账
 
 ## 5. 红线
