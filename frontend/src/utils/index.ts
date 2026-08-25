@@ -44,7 +44,7 @@ export const getOfficialSiteLink = (path: string) => {
   const officialSiteLang = langConfig?.officialSiteCode || '';
   const langPrefix = officialSiteLang ? `/${officialSiteLang}` : '';
   const basePath = path.startsWith('/') ? path : `/${path}`;
-  return `https://wntasg.io${langPrefix}${basePath}`;
+  return `https://higress.io${langPrefix}${basePath}`;
 };
 
 // Remove trailing spaces and tabs from every line, preserving line breaks.

@@ -20,14 +20,14 @@ const ChatRobot = () => {
   const gptApi = configData['chat.endpoint'];
 
   const initMessage = {
-    text: `您好~ 如果您喜欢 <b>WntASG</b>，请给 WntASG 一颗星！ <br /> 您的支持是我们最大的动力～`,
+    text: `您好~ 如果您喜欢 <b>Higress</b>，请给 Higress 一颗星！ <br /> 您的支持是我们最大的动力～`,
     img: StarIcon,
-    link: 'https://github.com/flx0002g/AISecGw',
+    link: 'https://github.com/alibaba/higress',
     date: new Date(),
     reply: true,
     type: 'init',
     user: {
-      name: 'WntASG',
+      name: 'Higress',
       avatar: 'https://avatars.githubusercontent.com/u/116630909?s=200&v=4',
     },
   };

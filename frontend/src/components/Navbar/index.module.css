@@ -5,21 +5,16 @@
 
 .header-nav-bar li {
   display: inline-block;
-  margin-right: 32px;
-  opacity: 0.8;
+  margin-right: 40px;
+  opacity: 0.6;
   cursor: pointer;
   &:hover {
     opacity: 1;
   }
 }
 .header-nav-bar li > a {
-  color: #cdd0e2;
+  color: #333;
   font-family: Avenir-Medium;
-  font-size: 14px;
-}
-
-.header-nav-bar li > a:hover {
-  color: #00fbf9;
 }
 
 @media (max-width: 768px) {

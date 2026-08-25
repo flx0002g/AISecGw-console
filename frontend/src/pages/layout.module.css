@@ -3,33 +3,5 @@
     width: 100%;
     justify-content: space-between;
     padding: 0 24px;
-    background-color: #23244c !important;
-    height: 56px;
-    line-height: 56px;
-  }
-
-  .ant-pro-global-header-logo h1 {
-    color: #ffffff !important;
-  }
-
-  .ant-pro-global-header .anticon {
-    color: #cdd0e2 !important;
-  }
-
-  .ant-pro-global-header .anticon:hover {
-    color: #00fbf9 !important;
-  }
-
-  .ant-pro-layout-header-actions-avatar {
-    color: #cdd0e2 !important;
-  }
-
-  .ant-pro-layout-header-actions-avatar:hover {
-    color: #00fbf9 !important;
-  }
-
-  .ant-pro-layout .ant-pro-layout-header {
-    background-color: #23244c !important;
-    box-shadow: 0 1px 4px rgba(0, 21, 41, 0.12);
   }
 }

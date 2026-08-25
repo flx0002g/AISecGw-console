@@ -16,6 +16,6 @@ export default function SourcePage() {
 
 export const pageConfig = definePageConfig(() => {
   return {
-    title: 'WntASG Console',
+    title: 'Higress Console',
   };
 });

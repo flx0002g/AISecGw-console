@@ -5,8 +5,8 @@ import React, { useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import styles from "./index.module.css";
 
-const COMMERCIAL_URL_ZH = "https://www.aliyun.com/product/apigateway?spm=wntasg-console.topbar.0.0.0";
-const COMMERCIAL_URL_EN = "https://www.alibabacloud.com/en/product/api-gateway?spm=wntasg-console.topbar.0.0.0";
+const COMMERCIAL_URL_ZH = "https://www.aliyun.com/product/apigateway?spm=higress-console.topbar.0.0.0";
+const COMMERCIAL_URL_EN = "https://www.alibabacloud.com/en/product/api-gateway?spm=higress-console.topbar.0.0.0";
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
 interface NavbarProps { }
@@ -22,7 +22,7 @@ const Navbar: React.FC<NavbarProps> = () => {
       },
       {
         name: t("navbar.docs"),
-        link: getOfficialSiteLink("/docs/latest/overview/what-is-wntasg"),
+        link: getOfficialSiteLink("/docs/latest/overview/what-is-higress"),
       },
       {
         name: t("navbar.commercial"),
@@ -38,7 +38,7 @@ const Navbar: React.FC<NavbarProps> = () => {
       },
       {
         name: t("navbar.download"),
-        link: "https://github.com/flx0002g/AISecGw/releases",
+        link: "https://github.com/alibaba/higress/releases",
       },
     ];
   }, [i18n.language]);
@@ -55,7 +55,7 @@ const Navbar: React.FC<NavbarProps> = () => {
         );
       })}
       <li>
-        <a href="https://github.com/flx0002g/AISecGw" target="_blank">
+        <a href="https://github.com/alibaba/higress" target="_blank">
           <GithubOutlined style={{ fontSize: "16px" }} />
         </a>
       </li>
