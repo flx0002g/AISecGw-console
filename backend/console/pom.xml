@@ -18,7 +18,7 @@
 		<skip.frontend>false</skip.frontend>
 		<springdoc-openapi-maven-plugin.version>1.4</springdoc-openapi-maven-plugin.version>
 
-		<app.build.version>2.2.2</app.build.version>
+		<app.build.version>V100R001C01B010</app.build.version>
 		<app.build.dev>false</app.build.dev>
 	</properties>
 
