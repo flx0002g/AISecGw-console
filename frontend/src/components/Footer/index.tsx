@@ -11,7 +11,7 @@ const Footer: React.FC = () => {
         systemState.version && (
           <>
             <br />
-            v{systemState.version}
+            {systemState.version}
           </>
         )
       }
