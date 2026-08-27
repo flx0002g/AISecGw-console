@@ -17,7 +17,13 @@
 - 自研后端代码：独立仓库 `/home/wnt/ASG/asg-console-extension`
   （Maven 坐标 `com.asg:asg-console-extension:0.0.1-SNAPSHOT`，Spring Boot AutoConfiguration 装配）。
   **唯一集成点**：`backend/console/pom.xml` 中的一行依赖声明。
-- 自研 Wasm 插件：独立仓库 `/home/wnt/ASG/asg-wasm-plugins`。
+- 自研 Wasm 插件：独立仓库 `/home/wnt/ASG/asg-wasm-plugins`（GitHub `flx0002/asg-wasm-plugins`）。
+  - **key-auth 自研覆盖（真重叠）**：上游同名插件的改造版（main.go +61 行，核心为 `identify_only` 识别模式——
+    仅识别合法消费者并设置 `x-mse-consumer` 头、不拒绝未认证请求，服务于影子 AI 监控链路），
+    编译产物 `oci://172.22.0.3:5000/plugins/key-auth:2.0.2` 覆盖上游版运行。
+    **上游升级 key-auth 时必须人工比对并重放改造**（61 行差异，见 asg-wasm-plugins/extensions/key-auth）。
+  - **ai-quota 本地化（低风险重叠）**：上游同名插件**无自研改造**，仅本地编译
+    （`oci://172.22.0.3:5000/plugins/ai-quota:1.0.0`）供内网离线部署，源码随 fork 升级自动更新，无需人工处置。
 - 运行时配置（datasource/JPA/collector-token）：由 helm chart `asg.*` env + Secret 注入
   （s3b-rest 步骤 1，`application.properties` 已恢复上游）。
 
@@ -45,7 +51,8 @@
 1. 备份：`git branch backup-pre-merge-<date>`
 2. `git fetch upstream`
 3. `git merge upstream/main`（或目标 tag）
-4. 冲突处置：严格按第 3 节清单保留定制面；**禁止借冲突解决之机引入新的上游侵入**
+4. 冲突处置：严格按第 3 节清单保留定制面；**禁止借冲突解决之机引入新的上游侵入**；
+   **插件面同步比对（key-auth）**：若上游更新 `plugins/.../key-auth`，须将 `identify_only` 改造重放至新版后重新编译并推送本地 registry（172.22.0.3:5000）
 5. 合并后验证（必须全绿才可提交）：
    - 扩展模块：`mvn test`（含 `UpstreamApiClientAccessor` 反射兼容性单测）
    - 全量编译：JDK11 + `-Dpmd.skip=true -Dcheckstyle.skip=true -Dgpg.sign.skip=true -Dmaven.javadoc.skip=true`
@@ -56,5 +63,6 @@
 
 - 除第 3 节清单外，**禁止对上游文件做任何修改**
 - 新增自研功能一律走 `asg-console-extension`（后端）/ `asg-wasm-plugins`（插件）
+- 插件面红线：`key-auth` 自研覆盖版（identify_only 改造）升级时必须人工重放，禁止直接覆盖上游新版或丢弃改造；`ai-quota` 等纯上游插件禁止引入自研改动
 - 升级上游前必须核对 `UpstreamApiClientAccessor` 依赖的 `KubernetesClientService.client` 字段是否仍存在
   （反射访问器会在启动时给出明确异常）
