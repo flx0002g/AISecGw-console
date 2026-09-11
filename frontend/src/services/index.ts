@@ -7,3 +7,8 @@ export * from './tls-certificate';
 export * from './dashboard';
 export * from './plugin';
 export * from './ai-route';
+export * from './agent-guard';
+export * from './audit-chain-service';
+export * from './behavior-analysis';
+export * from './config-version';
+export * from './ai-shadow';

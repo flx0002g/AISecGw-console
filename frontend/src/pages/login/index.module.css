@@ -2,36 +2,199 @@
   position: absolute;
   right: 90px;
   top: 15px;
+  z-index: 10;
+}
+
+.language-dropdown :global {
+  .ant-dropdown-trigger {
+    color: #cdd0e2 !important;
+  }
+  .ant-dropdown-trigger:hover {
+    color: #00fbf9 !important;
+  }
 }
 
 .container {
+  width: 100%;
+  height: 100vh;
+  background: linear-gradient(135deg, #0a0e27 0%, #1a1f4e 30%, #23244c 60%, #2d1b3d 100%);
+  position: relative;
+  overflow: auto;
+}
+
+.container::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: radial-gradient(ellipse at 20% 50%, rgba(0, 251, 249, 0.08) 0%, transparent 50%),
+              radial-gradient(ellipse at 80% 20%, rgba(45, 140, 240, 0.06) 0%, transparent 50%),
+              radial-gradient(ellipse at 50% 80%, rgba(216, 12, 24, 0.04) 0%, transparent 50%);
+  pointer-events: none;
+}
+
+.login-center {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
   display: flex;
   flex-direction: column;
-  height: 100vh;
-  overflow: auto;
-  background-color: white;
+  align-items: center;
 }
 
-.container :global {
-  .ant-pro-form-login-container {
-    padding-top: 200px;
+.login-logo {
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.login-logo img {
+  width: 196px;
+  height: 73px;
+}
+
+.login-title {
+  text-align: center;
+  color: #ffffff;
+  font-size: 24px;
+  font-weight: 600;
+  margin-top: 12px;
+  letter-spacing: 2px;
+}
+
+.login-card {
+  width: 380px;
+  min-height: 280px;
+  border-radius: 2px;
+  background: linear-gradient(149deg, rgba(255, 255, 255, 0.25) 26%, rgba(255, 255, 255, 0.1) 100%);
+  backdrop-filter: blur(140px);
+  -webkit-backdrop-filter: blur(140px);
+  box-sizing: border-box;
+  border: 1px solid;
+  border-image: linear-gradient(140deg, rgba(255, 255, 255, 0.5) -2%, rgba(255, 255, 255, 0) 35%) 1;
+}
+
+.login-form {
+  padding: 60px 30px 0;
+  position: relative;
+}
+
+.login-form :global {
+  .ant-form-item {
+    box-sizing: border-box;
+    margin-bottom: 30px;
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    border-radius: 0;
+    background: transparent;
   }
 
-  .ant-pro-form-login-logo {
-    width: 70px;
-    height: 70px;
+  .ant-form-item-noStyle {
+    border: none;
+    margin-bottom: 0;
+  }
+
+  .ant-form-item-label {
+    display: none;
+  }
+
+  .ant-form-item-control-input {
+    min-height: 32px;
+  }
+
+  .ant-form-item-with-help {
+    margin-bottom: 8px;
+  }
+
+  .ant-input-affix-wrapper {
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+    color: #ffffff;
+    caret-color: #ffffff;
+  }
+
+  .ant-input {
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+    color: #ffffff !important;
+    caret-color: #ffffff;
+    height: 32px;
+    font-size: 14px;
+  }
+
+  .ant-input::placeholder {
+    color: rgba(255, 255, 255, 0.4);
+  }
+
+  .ant-input-prefix {
+    color: rgba(255, 255, 255, 0.5) !important;
+    margin-right: 8px;
+  }
+
+  .ant-input-suffix {
+    color: rgba(255, 255, 255, 0.5) !important;
+  }
+
+  .ant-form-item-explain-error {
+    color: #ff4949;
+    font-size: 12px;
+    padding-top: 4px;
   }
 }
 
-@media (min-width: 768px) {
-  .container {
-    background-image: url('https://gw.alipayobjects.com/zos/rmsportal/TVYTbAXWheQpRcWDaDMu.svg');
-    background-repeat: no-repeat;
-    background-position: center 110px;
-    background-size: 100%;
-  }
+.login-btn {
+  width: 100%;
+  height: 44px;
+  border-radius: 2px;
+  background: #d80c18 !important;
+  border: none !important;
+  color: #ffffff !important;
+  font-size: 16px;
+  font-weight: 500;
+  letter-spacing: 2px;
+  text-align: center;
+  margin-top: 10px;
+  margin-bottom: 40px;
+}
 
-  .content {
-    padding: 32px 0 24px;
-  }
+.login-btn:hover {
+  background: #e81020 !important;
+  border: none !important;
+}
+
+.login-prompt {
+  text-align: center;
+  color: rgba(255, 255, 255, 0.65);
+  white-space: pre-wrap;
+  margin-bottom: 16px;
+  font-size: 13px;
+}
+
+.login-footer {
+  position: absolute;
+  width: 100%;
+  bottom: 0;
+  background-color: #000;
+  height: 40px;
+  line-height: 40px;
+  text-align: center;
+}
+
+.login-footer ul {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.login-footer .copyright-text {
+  opacity: 1;
+  font-size: 12px;
+  font-weight: 500;
+  color: #d9d9d9;
 }

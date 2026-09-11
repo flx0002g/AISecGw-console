@@ -1,10 +1,14 @@
 import {
+  AuditOutlined,
   DashboardOutlined,
   DeploymentUnitOutlined,
+  EyeOutlined,
   FullscreenExitOutlined,
   GlobalOutlined,
+  RadarChartOutlined,
   RobotOutlined,
   SafetyCertificateOutlined,
+  SecurityScanOutlined,
   SettingOutlined,
   UnorderedListOutlined,
   UserOutlined,
@@ -44,21 +48,6 @@ export default {
         icon: <DashboardOutlined />,
       },
       {
-        name: 'menu.serviceSources',
-        path: '/service-source',
-        icon: <FullscreenExitOutlined />,
-      },
-      {
-        name: 'menu.serviceList',
-        path: '/service',
-        icon: <UnorderedListOutlined />,
-      },
-      {
-        name: 'menu.routeConfig',
-        path: '/route',
-        icon: <DeploymentUnitOutlined />,
-      },
-      {
         name: 'menu.aiServiceManagement',
         icon: <RobotOutlined />,
         children: [
@@ -89,6 +78,184 @@ export default {
         ],
       },
       {
+        name: 'menu.aiShadowManagement',
+        icon: <EyeOutlined />,
+        children: [
+          {
+            name: 'menu.aiShadowDetected',
+            path: '/ai-shadow/detected',
+          },
+          {
+            name: 'menu.aiShadowRoute',
+            path: '/ai-shadow/route',
+          },
+        ],
+      },
+      {
+        name: 'menu.aiContentSecurity',
+        icon: <SecurityScanOutlined />,
+        children: [
+          {
+            name: 'menu.aiSecurityGuard',
+            path: '/ai-security-guard',
+          },
+          {
+            name: 'menu.aiPiiGuard',
+            path: '/ai-pii-guard',
+          },
+          {
+            name: 'menu.aiPromptGuard',
+            path: '/ai-prompt-guard',
+          },
+          {
+            name: 'menu.aiKeywordFilter',
+            path: '/ai-keyword-filter',
+          },
+          {
+            name: 'menu.aiWafProtection',
+            path: '/ai-waf',
+          },
+        ],
+      },
+      {
+        name: 'menu.aiAgentGuard',
+        icon: <SafetyCertificateOutlined />,
+        children: [
+          {
+            name: 'menu.aiAgentGuardConfig',
+            path: '/ai-agent-guard/config',
+          },
+        ],
+      },
+      {
+        name: 'menu.auditChain',
+        icon: <AuditOutlined />,
+        children: [
+          {
+            name: 'menu.auditChainLogs',
+            path: '/audit-chain/audit-logs',
+          },
+          {
+            name: 'menu.auditChainTracking',
+            path: '/audit-chain/audit-chain',
+          },
+        ],
+      },
+      {
+        name: 'menu.behaviorAnalysis',
+        icon: <RadarChartOutlined />,
+        children: [
+          {
+            name: 'menu.behaviorDashboard',
+            path: '/behavior-analysis/dashboard',
+          },
+          {
+            name: 'menu.behaviorAlerts',
+            path: '/behavior-analysis/alerts',
+          },
+          {
+            name: 'menu.behaviorProfiles',
+            path: '/behavior-analysis/profiles',
+          },
+          {
+            name: 'menu.behaviorSessionGraph',
+            path: '/behavior-analysis/session-graph',
+          },
+        ],
+      },
+      {
+        name: 'menu.serviceSources',
+        path: '/service-source',
+        icon: <FullscreenExitOutlined />,
+      },
+      {
+        name: 'menu.serviceList',
+        path: '/service',
+        icon: <UnorderedListOutlined />,
+      },
+      {
+        name: 'menu.routeConfig',
+        path: '/route',
+        icon: <DeploymentUnitOutlined />,
+      },
+      {
+        name: 'menu.pluginManagement',
+        path: '/plugin',
+        icon: <WindowsOutlined />,
+      },
+      {
+        name: 'menu.aiContentSecurity',
+        icon: <SecurityScanOutlined />,
+        children: [
+          {
+            name: 'menu.aiSecurityGuard',
+            path: '/ai-security-guard',
+          },
+          {
+            name: 'menu.aiPiiGuard',
+            path: '/ai-pii-guard',
+          },
+          {
+            name: 'menu.aiPromptGuard',
+            path: '/ai-prompt-guard',
+          },
+          {
+            name: 'menu.aiKeywordFilter',
+            path: '/ai-keyword-filter',
+          },
+          {
+            name: 'menu.aiWafProtection',
+            path: '/ai-waf',
+          },
+        ],
+      },
+      {
+        name: 'menu.aiAgentGuard',
+        icon: <SafetyCertificateOutlined />,
+        children: [
+          {
+            name: 'menu.aiAgentGuardConfig',
+            path: '/ai-agent-guard/config',
+          },
+        ],
+      },
+      {
+        name: 'menu.auditChain',
+        icon: <AuditOutlined />,
+        children: [
+          {
+            name: 'menu.auditChainLogs',
+            path: '/audit-chain/audit-logs',
+          },
+          {
+            name: 'menu.auditChainTracking',
+            path: '/audit-chain/audit-chain',
+          },
+        ],
+      },
+      {
+        name: 'menu.behaviorAnalysis',
+        icon: <RadarChartOutlined />,
+        children: [
+          {
+            name: 'menu.behaviorDashboard',
+            path: '/behavior-analysis/dashboard',
+          },
+          {
+            name: 'menu.behaviorAlerts',
+            path: '/behavior-analysis/alerts',
+          },
+          {
+            name: 'menu.behaviorProfiles',
+            path: '/behavior-analysis/profiles',
+          },
+          {
+            name: 'menu.behaviorSessionGraph',
+            path: '/behavior-analysis/session-graph',
+          },
+        ],
+      },
+      {
         name: 'menu.domainManagement',
         path: '/domain',
         icon: <GlobalOutlined />,
@@ -104,14 +271,19 @@ export default {
         icon: <UserOutlined />,
       },
       {
-        name: 'menu.pluginManagement',
-        path: '/plugin',
-        icon: <WindowsOutlined />,
-      },
-      {
         name: 'menu.systemSettings',
         path: '/system',
         icon: <SettingOutlined />,
+        children: [
+          {
+            name: 'menu.systemSettings',
+            path: '/system',
+          },
+          {
+            name: 'menu.configVersionCenter',
+            path: '/config-versions',
+          },
+        ],
       },
     ],
   },

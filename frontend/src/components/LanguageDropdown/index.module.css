@@ -1,25 +1,24 @@
-.language-switch {
-  display: inline-block;
-  border: 1px solid #333;
-  color: #333;
-  box-sizing: border-box;
-  min-width: 24px;
-  height: 24px;
-  line-height: 20px;
-  text-align: center;
-  border-radius: 2px;
+.language-dropdown {
+  display: flex;
+  align-items: center;
   cursor: pointer;
-  font-family: PingFangSC-Medium;
-  font-size: 14px;
-  opacity: 0.6;
-  margin-right: 30px;
+  padding: 0 8px;
+  height: 48px;
+  color: #cdd0e2;
+  transition: all 0.3s;
+
   &:hover {
-    opacity: 1;
+    color: #00fbf9;
   }
 }
 
-@media (max-width: 768px) {
-  .language-switch {
-    margin-right: 0;
+.language-dropdown :global {
+  .anticon {
+    color: #cdd0e2;
+    margin-right: 4px;
+  }
+
+  .anticon:hover {
+    color: #00fbf9;
   }
 }

@@ -1,7 +1,7 @@
 {
   "name": "@ice/antd-pro-scaffold",
   "version": "0.1.0",
-  "description": "higress console",
+  "description": "WntASG Console",
   "dependencies": {
     "@ant-design/charts": "^1.4.2",
     "@ant-design/icons": "^4.7.0",
@@ -26,7 +26,8 @@
     "react-i18next": "^12.1.4",
     "react-markdown": "^9.0.0",
     "react-syntax-highlighter": "^15.6.1",
-    "remark-gfm": "^4.0.1"
+    "remark-gfm": "^4.0.1",
+    "@antv/g6": "4.8.7"
   },
   "devDependencies": {
     "@ice/app": "^3.0.0",
